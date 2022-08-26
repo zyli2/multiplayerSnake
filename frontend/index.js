@@ -2,7 +2,7 @@ const BG_COLOR = '#231f20';
 const SNAKE_COLOR = '#c2c2c2';
 const FOOD_COLOR = '#e66916';
 
-const socket = io('http://localhost:3000');
+const socket = io('https://quiet-woodland-65841.herokuapp.com/');
 
 socket.on('init', handleInit);
 socket.on('gameState', handleGameState);
@@ -35,30 +35,6 @@ function joinGame() {
 let canvas, ctx;
 let playerNumber;
 let gameActive = false;
-
-const gameState = {
-    player: {
-        pos: {
-            x: 3,
-            y: 10,
-        },
-        vel: {
-            x: 1,
-            y: 0,
-        },
-        snake: [
-            {x: 1, y: 10},
-            {x: 2, y: 10},
-            {x: 3, y: 10},
-        ],
-    },
-    food: {
-        x: 7,
-        y: 7,
-    },
-    // there are 20 squares in a grid
-    gridsize: 20,
-};
 
 function init() {
     initialScreen.style.display = "none";
@@ -107,7 +83,6 @@ function paintPlayer(playerState, size, color) {
 
 function handleInit(number) {
     playerNumber = number;
-    console.log(msg);
 }
 
 // now every time the server sends a gameState message with the new gameState object
@@ -123,15 +98,17 @@ function handleGameState(gameState) {
 function handleGameOver(data) {
     if (!gameActive) {
         return;
+
     }
     data = JSON.parse(data);
 
+    gameActive = false;
+
     if (data.winner === playerNumber) {
-        alert("You've won the battle!");
+        alert('You won the battle!');
     } else {
         alert('do not worry, there is always a next time!');
     }
-    gameActive = false;
 }
 
 function handleGameCode(gameCode) {
